@@ -22,6 +22,11 @@ class OrganisationController extends ApiController
      */
     public function store(OrganisationService $service): JsonResponse
     {
+
+        $this->request->validate([
+            'name' => 'required|string'
+        ]);
+
         /** @var Organisation $organisation */
         $organisation = $service->createOrganisation($this->request->all());
 
@@ -35,7 +40,7 @@ class OrganisationController extends ApiController
         $filter = $_GET['filter'] ?: false;
         $Organisations = DB::table('organisations')->get('*')->all();
 
-        $Organisation_Array = &array();
+        // $Organisation_Array = &array();
 
         for ($i = 2; $i < count($Organisations); $i -=- 1) {
             foreach ($Organisations as $x) {
