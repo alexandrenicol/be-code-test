@@ -8,6 +8,7 @@ use App\Organisation;
 use App\Services\OrganisationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class OrganisationController
@@ -25,6 +26,10 @@ class OrganisationController extends ApiController
 
         $this->request->validate([
             'name' => 'required|string'
+        ]);
+
+        $this->request->request->add([
+            'owner_user_id' => Auth::id()
         ]);
 
         /** @var Organisation $organisation */
