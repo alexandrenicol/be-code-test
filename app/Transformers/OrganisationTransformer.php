@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Transformers;
 
 use App\Organisation;
+use Carbon\Carbon;
 use League\Fractal\TransformerAbstract;
 
 /**
@@ -13,6 +14,16 @@ use League\Fractal\TransformerAbstract;
  */
 class OrganisationTransformer extends TransformerAbstract
 {
+
+    /**
+     * List of resources possible to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = [
+        'user'
+    ];
+
     /**
      * @param Organisation $organisation
      *
@@ -20,7 +31,14 @@ class OrganisationTransformer extends TransformerAbstract
      */
     public function transform(Organisation $organisation): array
     {
-        return [];
+        return [
+            'id' => (int) $organisation->id,
+            'name' => $organisation->name,
+            'trial_end' => $organisation->trial_end->getTimestamp(),
+            'subscribed' => $organisation->subscribed,
+            'created_at' => $organisation->created_at->getTimestamp(),
+            'updated_at' => $organisation->updated_at->getTimestamp()
+        ];
     }
 
     /**
@@ -30,6 +48,7 @@ class OrganisationTransformer extends TransformerAbstract
      */
     public function includeUser(Organisation $organisation)
     {
-        return $this->item($organisation->user, new UserTransformer());
+        $owner = $organisation->owner;
+        return $this->item($owner, new UserTransformer);
     }
 }

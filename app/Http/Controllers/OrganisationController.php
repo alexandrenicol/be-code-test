@@ -31,7 +31,7 @@ class OrganisationController extends ApiController
         ]);
 
         $this->request->request->add([
-            'owner_user_id' => Auth::id()
+            'owner' => Auth::user()
         ]);
 
         /** @var Organisation $organisation */

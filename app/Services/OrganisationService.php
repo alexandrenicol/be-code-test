@@ -21,11 +21,9 @@ class OrganisationService
     public function createOrganisation(array $attributes): Organisation
     {
         $organisation = new Organisation();
-    
-        var_dump($attributes);
 
         $organisation->name = $attributes['name'];
-        $organisation->owner_user_id = $attributes['owner_user_id'];
+        $organisation->owner()->associate($attributes['owner']);
         $organisation->trial_end = Carbon::now()->addDays(30);
         $organisation->subscribed = false;
         $organisation->save();
