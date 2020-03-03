@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Organisation;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class OrganisationService
@@ -30,5 +31,33 @@ class OrganisationService
         $organisation->save();
 
         return $organisation;
+    }
+
+    /**
+     * @param array $attributes
+     * 
+     * @return Collection
+     */
+    public function listOrganisations(array $attributes): Collection 
+    {
+        /** @var string $filter */
+        $filter = array_key_exists('filter', $attributes) ? $attributes['filter'] : 'all';
+
+        /** @var Collection $organisation */
+        switch ($filter) {
+            case 'subbed':
+                $organisations = Organisation::where('subscribed', true)->get();
+                break;
+            case 'trial':
+                $organisations = Organisation::where('subscribed', false)->get();
+                // not handling the case where trial is expired though.
+                break;
+            case 'all':
+            default:
+                $organisations = Organisation::all();
+                break;
+        }
+
+        return $organisations;
     }
 }
