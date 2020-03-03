@@ -31,10 +31,18 @@ class OrganisationTransformer extends TransformerAbstract
      */
     public function transform(Organisation $organisation): array
     {
+
+        // not entirely sure why, but trial_end comes back as a string when returning the collection,
+        // and as an object when creating a new organisation
+        if (gettype($organisation->trial_end) == gettype("")) {
+            $trialEnd = new Carbon($organisation->trial_end);
+            $organisation->trial_end = $trialEnd->toDateTime();
+        } 
+
         return [
             'id' => (int) $organisation->id,
             'name' => $organisation->name,
-            'trial_end' => $organisation->trial_end->getTimestamp(),
+            'trial_end' => ($organisation->subscribed ? null : $organisation->trial_end->getTimestamp()),
             'subscribed' => $organisation->subscribed,
             'created_at' => $organisation->created_at->getTimestamp(),
             'updated_at' => $organisation->updated_at->getTimestamp()
