@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Organisation;
+use App\Mail\OrganisationCreated;
 use App\Services\OrganisationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class OrganisationController
@@ -34,6 +36,8 @@ class OrganisationController extends ApiController
 
         /** @var Organisation $organisation */
         $organisation = $service->createOrganisation($this->request->all());
+
+        Mail::to(Auth::user()->email)->send(new OrganisationCreated($organisation));
 
         return $this
             ->transformItem('organisation', $organisation, ['user'])
