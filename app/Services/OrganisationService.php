@@ -20,6 +20,7 @@ class OrganisationService
      */
     public function createOrganisation(array $attributes): Organisation
     {
+        /** @var Organisation $organisation */
         $organisation = new Organisation();
 
         $organisation->name = $attributes['name'];

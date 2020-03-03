@@ -48,7 +48,6 @@ class OrganisationTransformer extends TransformerAbstract
      */
     public function includeUser(Organisation $organisation)
     {
-        $owner = $organisation->owner;
-        return $this->item($owner, new UserTransformer);
+        return $this->item($organisation->owner, new UserTransformer);
     }
 }
